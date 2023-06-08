@@ -3,7 +3,7 @@
 <head>
     <title>Academic's Portfolio</title>
     <link rel="stylesheet" id="theme-style" href="dark.css">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" async>
 </head>
 <body>
     <header class="container-fluid py-3 bg-light">
@@ -12,8 +12,7 @@
             <button id="mode-switch" class="btn btn-outline-primary">Light</button>
         </div>
     </header>
-
-    <nav class="container mt-4">
+     <nav class="container mt-4">
         <ul class="nav nav-pills">
             <li class="nav-item">
                 <a class="nav-link active" href="#about">About Me</a>
@@ -29,60 +28,51 @@
             </li>
         </ul>
     </nav>
-
-    <main class="container mt-5">
+     <main class="container mt-5">
         <section id="about">
             <h2>About Me</h2>
             <p>Short biography here.</p>
         </section>
-
-        <section id="research" class="mt-5">
+         <section id="research" class="mt-5">
             <h2>Research</h2>
             <p>Overview of research interests and current projects.</p>
         </section>
-
-        <section id="publications" class="mt-5">
+         <section id="publications" class="mt-5">
             <h2>Publications</h2>
             <p>List of your publications.</p>
         </section>
-
-        <section id="github" class="mt-5">
+         <section id="github" class="mt-5">
             <h2>Github Repositories</h2>
             <p>Links to your GitHub repositories.</p>
         </section>
     </main>
-
-    <footer class="container-fluid py-3 bg-light mt-5">
+     <footer class="container-fluid py-3 bg-light mt-5">
         <div class="container">
             <p>Contact information and social links here.</p>
         </div>
     </footer>
-
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script src="theme.js"></script>
+     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" async></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" async></script>
+    <script src="theme.js" async></script>
+    <script>
+        fetch('https://pub.orcid.org/v2.1/0000-0002-1887-6655/works')
+            .then(response => response.text())
+            .then(str => (new window.DOMParser()).parseFromString(str, "text/xml"))
+            .then(data => {
+                const publications = data.getElementsByTagName('work-summary');
+                const publicationsContainer = document.getElementById('publications');
+                 for(let i = 0; i < publications.length; i++){
+                    const pubDiv = document.createElement('div');
+                    const title = document.createElement('h3');
+                    const details = document.createElement('p');
+                     title.textContent = publications[i].getElementsByTagName('title')[0].textContent;
+                    details.textContent = `Published on ${publications[i].getElementsByTagName('publication-date')[0].textContent}`;
+                     pubDiv.appendChild(title);
+                    pubDiv.appendChild(details);
+                     publicationsContainer.appendChild(pubDiv);
+                }
+            })
+            .catch(error => console.error('Error:', error));
+    </script>
 </body>
 </html>
-<script> fetch('https://pub.orcid.org/v2.1/0000-0002-1887-6655/works')
-    .then(response => response.text())
-    .then(str => (new window.DOMParser()).parseFromString(str, "text/xml"))
-    .then(data => {
-        const publications = data.getElementsByTagName('work-summary');
-        const publicationsContainer = document.getElementById('publications');
-
-        for(let i = 0; i < publications.length; i++){
-            const pubDiv = document.createElement('div');
-            const title = document.createElement('h3');
-            const details = document.createElement('p');
-            
-            title.textContent = publications[i].getElementsByTagName('title')[0].textContent;
-            details.textContent = `Published on ${publications[i].getElementsByTagName('publication-date')[0].textContent}`;
-            
-            pubDiv.appendChild(title);
-            pubDiv.appendChild(details);
-            
-            publicationsContainer.appendChild(pubDiv);
-        }
-    })
-    .catch(error => console.error('Error:', error));
-</script>
